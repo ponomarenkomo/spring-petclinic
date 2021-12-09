@@ -2,13 +2,14 @@ pipeline {
     agent {
         docker {
             image 'maven:3.8.1-adoptopenjdk-11' 
-            args '-v /root/.m2:/root/.m2' 
+            args '-v /var/jenkins_home/workspace/Spring-PetClinic-Pipelinepipeline:/root/Spring-Petclinic' 
         }
     }
     stages {
         stage('Build') { 
             steps {
-                sh 'mvn -B -DskipTests clean package' 
+                sh './mvnw package'
+                sh 'java -jar target/*.jar'
             }
         }
     }
