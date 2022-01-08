@@ -1,0 +1,33 @@
+{
+  "family" : "petclinic-task",
+  "networkMode": "awsvpc",
+  "execution_role_arn" : "arn:aws:iam::145212409650:role/myECcsTaskExecutionRole",
+  "containerDefinitions":
+  [
+    {
+      "name": "testapp",
+      "image": "145212409650.dkr.ecr.us-east-1.amazonaws.com/spring-petclinic-demo:0",
+      "cpu": 1024,
+      "memory": 2048,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/testapp",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080
+        }
+      ]
+    }
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+"cpu": "1024",
+"memory": "2048"
+}
