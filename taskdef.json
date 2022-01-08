@@ -1,7 +1,7 @@
 {
   "family" : "petclinic-task",
   "networkMode": "awsvpc",
-  "execution_role_arn" : "arn:aws:iam::145212409650:role/myECcsTaskExecutionRole",
+  "executionRoleArn" : "arn:aws:iam::145212409650:role/myECcsTaskExecutionRole",
   "containerDefinitions":
   [
     {
