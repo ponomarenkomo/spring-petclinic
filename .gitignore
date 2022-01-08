@@ -11,4 +11,9 @@ target/*
 .vscode
 _site/
 *.css
+.terraform
+.terraform.tfstate.lock.info
+terraform.tfstate
+terraform.tfstate.backup
+secrets.tfvars
 !petclinic.css
