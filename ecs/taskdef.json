@@ -6,7 +6,7 @@
   [
     {
       "name": "testapp",
-      "image": "145212409650.dkr.ecr.us-east-1.amazonaws.com/spring-petclinic-demo:0",
+      "image": "${app_image}",
       "cpu": 1024,
       "memory": 2048,
       "logConfiguration": {
