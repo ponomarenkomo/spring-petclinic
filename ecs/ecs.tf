@@ -39,7 +39,7 @@ resource "aws_ecs_service" "test-service" {
 
   load_balancer {
     target_group_arn = aws_alb_target_group.myapp-tg.arn
-    container_name   = "testapp"
+    container_name   = "${var.name}-${var.environment}"
     container_port   = var.app_port
   }
 
