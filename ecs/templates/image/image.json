@@ -1,7 +1,7 @@
 [
   {
     "name": "spring-petclinic",
-    "image": "{app_image}",
+    "image": "${app_image}",
     "cpu": 1,
     "memory": 256,
     "networkMode": "awsvpc",
