@@ -1,0 +1,80 @@
+pipeline {
+    agent any
+    stages {
+        
+        stage('Checkout') {
+            steps {
+                cleanWs()
+                git branch: 'main',
+                url: 'https://github.com/ponomarenkomo/spring-petclinic'
+            }
+        }
+        
+        stage('Dependency track') {
+            steps {
+                sh 'mvn org.owasp:dependency-check-maven:check'
+                archiveArtifacts artifacts: "target/*.html"
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                sh 'mvn package'
+            }
+            post {
+                failure('Build Fail') {
+                    echo "Build Failed!"
+                }
+                success {
+                     // Artifact saving
+                    archiveArtifacts artifacts: "target/*.jar", onlyIfSuccessful: true
+                    echo "Builded Successfully"
+                }
+            }
+        }
+        stage('Build image'){
+            steps {
+                    sh """
+                        #!/bin/bash
+                        sudo docker build . -t $ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
+                        
+                    """
+            }
+        }
+        stage('Push to ECR'){
+            steps {
+                withAWS(credentials: 'aws_credentials', region: 'us-east-1') {
+                    sh """aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY"""
+                            sh """
+                            #!/bin/bash
+                             docker push $ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER"""
+                    }
+            }
+        }
+        
+        stage('Deploy'){
+            steps {
+                    sh """
+                    sed -ie "s;\\\${app_image};$ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER;g" taskdef.json
+                    aws ecs register-task-definition --family testapp-task --cli-input-json file://taskdef.json
+                    """
+                    
+                    sh '''
+                    #!/bin/bash
+                    SERVICE_NAME="petclinic-service-demo"
+                    TASK_FAMILY="testapp-task"
+                    TASK_REVISION=`aws ecs describe-task-definition --task-definition testapp-task | grep "revision" | tr "," " " | awk '{print \$2}' `
+                    DESIRED_COUNT=`aws ecs describe-services --services ${SERVICE_NAME} --cluster petclinic-cluster-demo | grep "desiredCount" | tr "/" " " | awk '{print \$2}' | sed 's/,$//' | head -1`
+                    '''
+                    
+                    sh'''
+                        #!/bin/bash
+                        if [ ${DESIRED_COUNT} = "0" ]; then
+                            DESIRED_COUNT="2"
+                        fi
+                    aws ecs update-service --cluster petclinic-cluster-demo --service ${SERVICE_NAME} --task-definition ${TASK_FAMILY}:${TASK_REVISION} --desired-count ${DESIRED_COUNT}
+                    '''
+            }
+        }
+    }
+}
