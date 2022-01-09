@@ -10,12 +10,12 @@ pipeline {
             }
         }
         
-        stage('Dependency track') {
-            steps {
-                sh 'mvn org.owasp:dependency-check-maven:check'
-                archiveArtifacts artifacts: "target/*.html"
-            }
-        }
+        //stage('Dependency track') {
+        //    steps {
+        //        sh 'mvn org.owasp:dependency-check-maven:check'
+        //        archiveArtifacts artifacts: "target/*.html"
+        //    }
+        //}
         
         stage('Build') {
             steps {
