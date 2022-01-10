@@ -65,13 +65,7 @@ pipeline {
                     TASK_FAMILY="testapp-task"
                     TASK_REVISION=`aws ecs describe-task-definition --task-definition testapp-task | grep "revision" | tr "," " " | awk '{print \$2}' `
                     DESIRED_COUNT=`aws ecs describe-services --services ${SERVICE_NAME} --cluster petclinic-cluster-demo | grep "desiredCount" | tr "/" " " | awk '{print \$2}' | sed 's/,$//' | head -1`
-                    '''
-                    
-                    sh'''
-                        #!/bin/bash
-                        if [ ${DESIRED_COUNT} = "0" ]; then
-                            DESIRED_COUNT="2"
-                        fi
+        
                     aws ecs update-service --cluster petclinic-cluster-demo --service ${SERVICE_NAME} --task-definition ${TASK_FAMILY}:${TASK_REVISION} --desired-count ${DESIRED_COUNT}
                     '''
             }
