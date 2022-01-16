@@ -26,6 +26,7 @@ resource "aws_ecs_task_definition" "test-def" {
 
 resource "aws_ecs_service" "test-service" {
   name            = "${var.name}-service-${var.environment}"
+  deployment_minimum_healthy_percent = 0
   cluster         = aws_ecs_cluster.test-cluster.id
   task_definition = aws_ecs_task_definition.test-def.arn
   desired_count   = var.app_count
