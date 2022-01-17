@@ -27,7 +27,7 @@ pipeline {
                 }
                 success {
                      // Artifact saving
-                    archiveArtifacts artifacts: "target/*.jar", onlyIfSuccessful: true
+                    //archiveArtifacts artifacts: "target/*.jar", onlyIfSuccessful: true
                     echo "Builded Successfully"
                 }
             }
