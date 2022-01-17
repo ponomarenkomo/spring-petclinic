@@ -70,5 +70,11 @@ pipeline {
                     '''
             }
         }
+        stage('DAST'){
+            steps {
+                sh "docker run --rm -u 0 -v \$(pwd)/target:/zap/wrk -t owasp/zap2docker-stable zap-baseline.py -t http://$ECS_ALB:8080 -g gen.conf -r zaphtmlreport.html || true" 
+                archiveArtifacts artifacts: "target/*report.html"
+            }
+        }
     }
 }
