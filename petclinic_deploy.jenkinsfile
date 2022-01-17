@@ -55,7 +55,7 @@ pipeline {
                     sh """
                         #!/bin/bash
                         sudo docker build . -t $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
-                        docker login -u testuser --password-stdin ${DTR_PASS} $LOCAL_ECR_REGISTRY
+                        //docker login -u testuser --password-stdin ${DTR_PASS} $LOCAL_ECR_REGISTRY
                         sudo docker push $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
                     """ 
                 }
