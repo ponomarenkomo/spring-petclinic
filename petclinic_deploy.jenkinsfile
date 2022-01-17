@@ -55,9 +55,10 @@ pipeline {
                     sh """
                         #!/bin/bash
                         sudo docker build . -t $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
-                        //docker login -u testuser -p ${DTR_PASS} $LOCAL_ECR_REGISTRY
+                        
                         sudo docker push $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
                     """ 
+                    //docker login -u testuser -p ${DTR_PASS} $LOCAL_ECR_REGISTRY
                 //}
             }
         }
