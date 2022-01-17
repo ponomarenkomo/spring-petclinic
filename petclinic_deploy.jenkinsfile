@@ -92,7 +92,7 @@ pipeline {
                 sh """
                    #!/bin/bash
                    docker pull $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
-                   docker run --restart  unless-stopped -d -p 5505:8081 --name spring-petclinic $ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
+                   docker run --restart  unless-stopped -d -p 5505:8081 --name spring-petclinic $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
                 """
             }
         }
