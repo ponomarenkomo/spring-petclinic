@@ -51,15 +51,15 @@ pipeline {
             }
             
             steps {
-                //withCredentials([string(credentialsId: 'DTR_PASS', variable: 'DTR_PASS')]) {
+                withCredentials([string(credentialsId: 'DTR_PASS', variable: 'DTR_PASS')]) {
                     sh """
                         #!/bin/bash
-                        sudo docker build . -t $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
-                        
-                        sudo docker push $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
+                        docker build . -t $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
+                        docker login -u testuser -p ${DTR_PASS} $LOCAL_ECR_REGISTRY
+                        docker push $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
                     """ 
-                    //docker login -u testuser -p ${DTR_PASS} $LOCAL_ECR_REGISTRY
-                //}
+                    docker login -u testuser -p ${DTR_PASS} $LOCAL_ECR_REGISTRY
+                }
             }
         }
         
@@ -85,8 +85,8 @@ pipeline {
             steps{
                 sh """
                    #!/bin/bash
-                   sudo docker pull $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
-                   sudo docker run --restart  unless-stopped -d -p 5505:8081 --name spring-petclinic $ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
+                   docker pull $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
+                   docker run --restart  unless-stopped -d -p 5505:8081 --name spring-petclinic $ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
                 """
             }
         }
