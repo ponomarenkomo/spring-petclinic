@@ -68,6 +68,7 @@ pipeline {
         
                     aws ecs update-service --cluster petclinic-cluster-demo --service ${SERVICE_NAME} --task-definition ${TASK_FAMILY}:${TASK_REVISION} --desired-count ${DESIRED_COUNT} --force-new-deployment
                     '''
+                    sh "sleep 40"
             }
         }
         stage('DAST'){
