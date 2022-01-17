@@ -45,7 +45,7 @@ pipeline {
                 }
             }
         }
-        stage(Push to DTR) {
+        stage('Push to DTR') {
             when {
                 branch 'dev'  
             }
