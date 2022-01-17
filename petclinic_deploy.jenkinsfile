@@ -12,7 +12,7 @@ pipeline {
         
         stage('Dependency track') {
             steps {
-                sh 'mvn org.owasp:dependency-check-maven:check'
+                sh 'mvn org.owasp:dependency-check-maven:6.5.3:check'
                 archiveArtifacts artifacts: "target/*.html"
             }
         }
