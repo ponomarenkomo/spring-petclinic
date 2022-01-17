@@ -85,8 +85,8 @@ pipeline {
             steps{
                 sh """ 
                     #!/bin/bash
-                    if sudo docker ps --all | grep spring-petclinic; then 
-                        sudo docker rm --force spring-petclinic || true
+                    if docker ps --all | grep spring-petclinic; then 
+                        docker rm --force spring-petclinic || true
                     fi
                 """ 
                 sh """
