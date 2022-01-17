@@ -83,6 +83,12 @@ pipeline {
                 branch 'dev'  
             }
             steps{
+                sh """ 
+                    #!/bin/bash
+                    if sudo docker ps --all | grep spring-petclinic; then 
+                        sudo docker rm --force spring-petclinic || true
+                    fi
+                """ 
                 sh """
                    #!/bin/bash
                    docker pull $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
