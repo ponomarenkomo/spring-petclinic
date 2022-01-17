@@ -21,7 +21,7 @@ pipeline {
                 git branch: 'dev',
                 url: 'https://github.com/ponomarenkomo/spring-petclinic'
             }
-        }        
+        }       
         
         stage('Dependency track') {
             steps {
@@ -58,6 +58,7 @@ pipeline {
                         docker login -u testuser -p ${DTR_PASS} $LOCAL_ECR_REGISTRY
                         sudo docker push $LOCAL_ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER
                     """ 
+                }
             }
         }
         
