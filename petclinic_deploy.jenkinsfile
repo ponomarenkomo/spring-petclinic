@@ -28,12 +28,12 @@ pipeline {
             }
         }       
         
-        //stage('Dependency track') {
-        //    steps {
-        //        sh 'mvn org.owasp:dependency-check-maven:6.5.3:check'
-        //        archiveArtifacts artifacts: "target/*.html"
-        //    }
-        //}
+        stage('Dependency track') {
+            steps {
+                sh 'mvn org.owasp:dependency-check-maven:6.5.3:check'
+                archiveArtifacts artifacts: "target/*.html"
+            }
+        }
         
         stage('Build') {
             steps {
@@ -121,7 +121,7 @@ pipeline {
         }
         stage('DAST'){
             when {
-                branch 'dev'  
+                branch 'main'  
             }
             steps {
                 sh "docker run --rm -u 0 -v \$(pwd)/target:/zap/wrk -t owasp/zap2docker-stable zap-baseline.py -t http://$ECS_ALB:8080 -g gen.conf -r zaphtmlreport.html || true" 
