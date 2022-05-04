@@ -1,4 +1,9 @@
 pipeline {
+    parameters  {
+    string(name: 'LOCAL_ECR_REGISTRY', defaultValue: '', description: '')
+    string(name: 'ECR_REGISTRY', defaultValue: '', description: '')
+    string(name: 'ECS_ALB', defaultValue: '', description: '')
+    }
     agent any
     stages {
         
