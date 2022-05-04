@@ -1,8 +1,8 @@
 pipeline {
     parameters  {
     string(name: 'LOCAL_ECR_REGISTRY', defaultValue: '', description: '')
-    string(name: 'ECR_REGISTRY', defaultValue: '', description: '')
-    string(name: 'ECS_ALB', defaultValue: '', description: '')
+    string(name: 'ECR_REGISTRY', defaultValue: '145212409650.dkr.ecr.us-east-1.amazonaws.com', description: '')
+    string(name: 'ECS_ALB', defaultValue: 'petclinic-lb-demo-1860407745.us-east-1.elb.amazonaws.com', description: '')
     }
     agent any
     stages {
@@ -100,6 +100,7 @@ pipeline {
                 branch 'main'  
             }
             steps {
+                withAWS(credentials: 'aws_credentials', region: 'us-east-1') {
                     sh """
                     sed -ie "s;\\\${app_image};$ECR_REGISTRY/petclinic-ecr-demo:$BUILD_NUMBER;g" taskdef.json
                     aws ecs register-task-definition --family testapp-task --cli-input-json file://taskdef.json
@@ -115,6 +116,7 @@ pipeline {
                     aws ecs update-service --cluster petclinic-cluster-demo --service ${SERVICE_NAME} --task-definition ${TASK_FAMILY}:${TASK_REVISION} --desired-count ${DESIRED_COUNT} --force-new-deployment
                     '''
                     sh "sleep 40"
+               }
             }
         }
         stage('DAST'){
